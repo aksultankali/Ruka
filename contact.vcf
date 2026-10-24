@@ -2,7 +2,16 @@ BEGIN:VCARD
 VERSION:3.0
 N:Kaliyev;Aksultan;;;
 FN:Aksultan Kaliyev
+TEL;TYPE=CELL:+77028030300
 EMAIL;TYPE=INTERNET:aksultankaliyev@gmail.com
-URL:https://github.com/aksultankali
-URL:https://aksultankali.github.io/Ruka/
+item1.URL:https://wa.me/77028030300
+item1.X-ABLabel:WhatsApp
+item2.URL:https://t.me/yellowba1
+item2.X-ABLabel:Telegram
+item3.URL:https://instagram.com/aksultankali
+item3.X-ABLabel:Instagram
+item4.URL:https://github.com/aksultankali
+item4.X-ABLabel:GitHub
+item5.URL:https://aksultankali.github.io/Ruka/
+item5.X-ABLabel:Card
 END:VCARD

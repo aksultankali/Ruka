@@ -16,9 +16,11 @@ CONTACT = {
     "last_name": "Kaliyev",
     "title": "",  # должность, например "Product designer"
     "company": "",
-    "phone": "",  # например "+7 700 000 00 00"
+    "phone": "+7 702 803 03 00",
+    "whatsapp": True,  # True — тот же номер в WhatsApp
     "email": "aksultankaliyev@gmail.com",
-    "telegram": "",  # ник без @
+    "telegram": "yellowba1",  # ник без @
+    "instagram": "aksultankali",  # ник без @
     "github": "aksultankali",
     # Адрес, по которому опубликована визитка. Его записывают на NFC-метку.
     "page_url": "https://aksultankali.github.io/Ruka/",
@@ -28,7 +30,12 @@ ROOT = Path(__file__).parent
 TEMPLATE = ROOT / "templates" / "card.html"
 
 
-def vcard(c):
+def digits(phone):
+    return "".join(ch for ch in phone if ch.isdigit())
+
+
+def vcard(c, compact=False):
+    """compact=True keeps the QR code sparse: name, phone, email and the card link only."""
     def esc(v):
         return v.replace("\\", "\\\\").replace(",", "\\,").replace(";", "\\;")
 
@@ -44,15 +51,25 @@ def vcard(c):
     if c["title"]:
         lines.append(f"TITLE:{esc(c['title'])}")
     if c["phone"]:
-        lines.append(f"TEL;TYPE=CELL:{c['phone'].replace(' ', '')}")
+        lines.append(f"TEL;TYPE=CELL:+{digits(c['phone'])}")
     if c["email"]:
         lines.append(f"EMAIL;TYPE=INTERNET:{c['email']}")
-    if c["telegram"]:
-        lines.append(f"URL:https://t.me/{c['telegram']}")
-    if c["github"]:
-        lines.append(f"URL:https://github.com/{c['github']}")
+    links = []
+    if not compact:
+        if c["phone"] and c["whatsapp"]:
+            links.append(("WhatsApp", f"https://wa.me/{digits(c['phone'])}"))
+        if c["telegram"]:
+            links.append(("Telegram", f"https://t.me/{c['telegram']}"))
+        if c["instagram"]:
+            links.append(("Instagram", f"https://instagram.com/{c['instagram']}"))
+        if c["github"]:
+            links.append(("GitHub", f"https://github.com/{c['github']}"))
     if c["page_url"]:
-        lines.append(f"URL:{c['page_url']}")
+        links.append(("Card", c["page_url"]))
+    # itemN.X-ABLabel gives each link a readable name in iPhone Contacts; other apps ignore it.
+    for i, (label, url) in enumerate(links, 1):
+        lines.append(f"item{i}.URL:{url}")
+        lines.append(f"item{i}.X-ABLabel:{esc(label)}")
     lines.append("END:VCARD")
     return "\r\n".join(lines) + "\r\n"
 
@@ -60,11 +77,15 @@ def vcard(c):
 def contact_rows(c):
     rows = []
     if c["phone"]:
-        rows.append(("Телефон", c["phone"], f"tel:{c['phone'].replace(' ', '')}"))
-    if c["email"]:
-        rows.append(("Email", c["email"], f"mailto:{c['email']}"))
+        rows.append(("Телефон", c["phone"], f"tel:+{digits(c['phone'])}"))
+        if c["whatsapp"]:
+            rows.append(("WhatsApp", c["phone"], f"https://wa.me/{digits(c['phone'])}"))
     if c["telegram"]:
         rows.append(("Telegram", f"@{c['telegram']}", f"https://t.me/{c['telegram']}"))
+    if c["instagram"]:
+        rows.append(("Instagram", f"@{c['instagram']}", f"https://instagram.com/{c['instagram']}"))
+    if c["email"]:
+        rows.append(("Email", c["email"], f"mailto:{c['email']}"))
     if c["github"]:
         rows.append(("GitHub", f"github.com/{c['github']}", f"https://github.com/{c['github']}"))
     out = []
@@ -101,9 +122,7 @@ def main():
         .replace("{{INITIALS}}", (c["first_name"][:1] + c["last_name"][:1]).upper())
         .replace("{{NAME_LINES}}", "<br>".join(html.escape(p) for p in full.split()))
         .replace("{{CONTACT_ROWS}}", contact_rows(c))
-        .replace("{{QR_SVG}}", qr_svg(card))
-        .replace("{{VCARD_JSON}}", json.dumps(card))
-        .replace("{{VCF_NAME_JSON}}", json.dumps(f"{full.replace(' ', '_')}.vcf"))
+        .replace("{{QR_SVG}}", qr_svg(vcard(c, compact=True)))
         .replace("{{PAGE_URL_JSON}}", json.dumps(c["page_url"]))
     )
     (ROOT / "card.fragment.html").write_text(page, encoding="utf-8")
