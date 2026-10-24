@@ -21,7 +21,7 @@ CONTACT = {
     "telegram": "",  # ник без @
     "github": "aksultankali",
     # Адрес, по которому опубликована визитка. Его записывают на NFC-метку.
-    "page_url": "",
+    "page_url": "https://aksultankali.github.io/Ruka/",
 }
 
 ROOT = Path(__file__).parent
