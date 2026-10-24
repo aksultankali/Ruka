@@ -1,136 +1,170 @@
 <title>Aksultan Kaliyev</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Цифровая визитка Aksultan Kaliyev: контакты, QR-код и сохранение в телефонную книгу.">
+<meta name="theme-color" content="#0E1430">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600&family=Manrope:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&display=swap">
 <style>
-  /* Hallmark · checked: 2026-10-24 · genre: editorial (inferred: a personal card)
-   * floor: 0 FAIL · fixed: 13 (7b, 24b, 25, 26a, 26b, 34, 39b, 48, 49, 63, 64, 67, 75) · structural: 3 printed (44c, 77, 79)
-   * built: the project · redesign: polish · v2.0.0 */
-  /* Layout: one narrow phone column — ink card, contact list, QR tile. Same as the Figma frame. */
+  /* Hallmark · checked: 2026-10-24 · genre: atmospheric (by request: night, geometry, ink)
+   * floor: 0 FAIL · structural: 3 printed (44c, 77, 79) · direction: honeycomb = girih lattice; tamga = ninja scroll seal; kazakh ram-horn curl = spiral
+   * built: the project · redesign: restyle · v2.0.0 */
+  /* Layout: one phone column on a night-indigo ground. A seal, a name, one honey action;
+     contacts on hairlines; the QR on a parchment tile. Ornament stays at the edges. */
   :root {
-    --paper: #EEF0EC;
-    --ink: #17213A;
-    --amber: #D9A441;
-    --muted: #5B6478;
-    --line: #D5D9D2;
-    --ghost-line: #3A4766;
-    --tile: #FBFCF9;
-    --card-fg: #EEF0EC;
-    --card-sub: #B9C0D0;
-    --qr: #17213A;
-    --fg: #17213A;
-    --focus: #17213A;
-    --font-display: "Unbounded", "Arial Black", system-ui, sans-serif;
-    --font-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper: #0F1526; --ink: #1C2744; --muted: #8E97AD; --line: #27314D; --ghost-line: #3A4766;
-      --tile: #F4F5F1; --card-fg: #EEF0EC; --card-sub: #B9C0D0; --qr: #17213A; --fg: #EEF0EC; --focus: #D9A441; color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --paper: #0F1526; --ink: #1C2744; --muted: #8E97AD; --line: #27314D; --ghost-line: #3A4766;
-    --tile: #F4F5F1; --card-fg: #EEF0EC; --card-sub: #B9C0D0; --qr: #17213A; --fg: #EEF0EC; --focus: #D9A441; color-scheme: dark;
+    --night: #0E1430;
+    --night-2: #151D40;
+    --hairline: #2A335C;
+    --honey: #E3AE45;
+    --honey-ink: #1A1405;
+    --cinnabar: #B03A27;
+    --ivory: #F3EEE2;
+    --mist: #A7AECB;
+    --lattice: #E3AE45;
+    --mask: #000000;
+    --font: "Onest", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: dark;
   }
   html, body { overflow-x: clip; }
   body {
-    background: var(--paper);
-    color: var(--fg);
-    font-family: var(--font-body);
+    background: var(--night);
+    color: var(--ivory);
+    font-family: var(--font);
     font-size: 16px;
-    line-height: 1.45;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
   .page {
-    max-width: 420px;
+    max-width: 440px;
     margin: 0 auto;
-    padding-block: 40px 32px;
+    padding-block: 32px 40px;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
     display: grid;
-    gap: 20px;
+    gap: 32px;
   }
 
-  .card {
-    background: var(--ink);
-    color: var(--card-fg);
-    border-radius: 28px;
-    padding: 28px;
+  /* The hero: a seal, a name, one action. The lattice lives only in its top corner. */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    background: var(--night-2);
+    color: var(--ivory);
+    border: 1px solid var(--hairline);
+    border-radius: 32px;
+    padding: 32px 28px 28px;
     display: grid;
     gap: 24px;
+    overflow: clip;
   }
-  .card__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .monogram {
-    width: 52px; height: 52px; border-radius: 50%;
+  .lattice {
+    position: absolute; inset: 0 0 auto auto;
+    width: 280px; height: 280px;
+    color: var(--lattice);
+    opacity: .32;
+    z-index: -1;
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(circle at 100% 0%, var(--mask) 0%, transparent 70%);
+    mask-image: radial-gradient(circle at 100% 0%, var(--mask) 0%, transparent 70%);
+  }
+  .seal-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .seal {
+    position: relative;
+    width: 64px; height: 64px;
     display: grid; place-items: center;
-    background: var(--amber); color: var(--ink);
-    font: 600 18px/1 var(--font-display);
   }
-  .tag { font: 600 14px/1 var(--font-body); color: var(--amber); }
+  .seal svg { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--honey); }
+  .seal span {
+    position: relative;
+    width: 40px; height: 40px; border-radius: 8px;
+    display: grid; place-items: center;
+    background: var(--cinnabar); color: var(--ivory);
+    font: 700 16px/1 var(--font);
+    transform: rotate(-4deg);
+  }
+  .tag { font: 500 14px/1 var(--font); color: var(--honey); }
   h1 {
     margin: 0;
-    font: 600 clamp(30px, 9vw, 36px)/1.05 var(--font-display);
+    font: 700 clamp(40px, 12vw, 52px)/1 var(--font);
+    letter-spacing: -0.03em;
     text-wrap: balance;
     overflow-wrap: break-word;
     min-width: 0;
   }
-  .lead { margin: 0; color: var(--card-sub); font-size: 16px; line-height: 1.4; }
+  .lead { margin: 0; color: var(--mist); max-width: 32ch; }
 
   .btn {
-    display: flex; align-items: center; justify-content: center; gap: 12px;
-    min-height: 52px; border-radius: 16px; border: 0;
-    background: var(--amber); color: var(--ink);
-    font: 700 17px/1 var(--font-body);
+    display: flex; align-items: center; justify-content: center;
+    min-height: 52px; border-radius: 999px; border: 0;
+    background: var(--honey); color: var(--honey-ink);
+    font: 700 17px/1 var(--font);
     text-decoration: none; cursor: pointer; white-space: nowrap;
-    transition: transform .15s ease, filter .15s ease;
+    transition: transform .2s ease, opacity .2s ease;
   }
-  .btn:hover { filter: brightness(1.05); }
+  .btn:hover { opacity: .92; }
   .btn:active { transform: scale(.98); }
-  .btn:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
-  .btn:disabled, .copy:disabled { opacity: .5; cursor: not-allowed; transform: none; filter: none; }
-  .btn--ghost { background: transparent; color: var(--card-fg); border: 1px solid var(--ghost-line); min-height: 48px; font-size: 16px; }
+  .btn:focus-visible { outline: 2px solid var(--ivory); outline-offset: 4px; }
+  .btn:disabled, .copy:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  .btn--ghost { background: transparent; color: var(--ivory); border: 1px solid var(--hairline); min-height: 48px; font-size: 16px; }
   .actions { display: grid; gap: 12px; }
+  .status { min-height: 1.4em; margin: 0; font-size: 14px; color: var(--mist); }
 
-  .contacts { list-style: none; margin: 0; padding: 0 8px; }
+  /* Kazakh ram-horn curl; its two spirals sit where a scroll would be tied. */
+  .horn { display: block; width: 100%; max-width: 240px; height: 24px; margin: 0 auto; color: var(--honey); }
+
+  .contacts { list-style: none; margin: 0; padding: 0 4px; }
   .contacts li {
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    padding-block: 16px; border-bottom: 1px solid var(--line);
+    padding-block: 16px; border-bottom: 1px solid var(--hairline);
   }
+  .contacts li:first-child { border-top: 1px solid var(--hairline); }
   .contacts .text { min-width: 0; display: grid; gap: 4px; }
-  .label { font: 500 14px/1.2 var(--font-body); color: var(--muted); }
-  .value { font-weight: 600; font-size: 16px; overflow-wrap: break-word; color: inherit; text-decoration: none; user-select: all; }
-  .value:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: 4px; }
+  .label { font: 400 14px/1.2 var(--font); color: var(--mist); }
+  .value { font: 500 16px/1.3 var(--font); overflow-wrap: break-word; color: var(--ivory); text-decoration: none; user-select: all; }
+  .value:focus-visible { outline: 2px solid var(--honey); outline-offset: 4px; border-radius: 4px; }
   .copy {
-    flex: none; border: 1px solid var(--line); background: transparent; color: var(--muted);
-    border-radius: 999px; min-height: 44px; padding: 0 12px; font: 600 13px/1 var(--font-body); cursor: pointer;
-    transition: color .15s ease, border-color .15s ease;
+    flex: none; min-height: 44px; padding: 0 16px;
+    border: 1px solid var(--hairline); border-radius: 999px;
+    background: transparent; color: var(--mist);
+    font: 500 13px/1 var(--font); cursor: pointer;
+    transition: color .2s ease, border-color .2s ease;
   }
-  .copy:hover { color: var(--fg); border-color: var(--muted); }
-  .copy:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-  .copy[data-done] { color: var(--fg); border-color: var(--amber); }
+  .copy:hover { color: var(--ivory); border-color: var(--mist); }
+  .copy:focus-visible { outline: 2px solid var(--honey); outline-offset: 2px; }
+  .copy[data-done] { color: var(--honey); border-color: var(--honey); }
 
   .qr {
-    background: var(--tile); color: var(--qr);
-    border-radius: 24px; padding: 24px;
+    background: var(--ivory); color: var(--night);
+    border-radius: 32px; padding: 28px 24px 24px;
     display: grid; justify-items: center; gap: 16px; text-align: center;
   }
   .qr svg { width: min(240px, 100%); height: auto; display: block; }
-  .qr p { margin: 0; font-weight: 600; font-size: 16px; line-height: 1.4; max-width: 30ch; }
+  .qr p { margin: 0; font: 500 16px/1.4 var(--font); max-width: 30ch; }
 
-  .foot { margin: 0; text-align: center; font: 500 13px/1.5 var(--font-body); color: var(--muted); }
-  .status { min-height: 1.4em; margin: 0; font-size: 14px; color: var(--card-sub); }
+  .foot { margin: 0; text-align: center; font: 400 14px/1.5 var(--font); color: var(--mist); }
 
   @media (prefers-reduced-motion: reduce) { .btn, .copy { transition: none; } }
 </style>
 
 <main class="page">
-  <section class="card" aria-labelledby="name">
-    <div class="card__top">
-      <div class="monogram" aria-hidden="true">AK</div>
-      <span class="tag">Визитка</span>
+  <section class="hero" aria-labelledby="name">
+    <svg class="lattice" viewBox="0 0 280 280" aria-hidden="true" focusable="false">
+      <defs>
+        <pattern id="comb" width="28" height="50" patternUnits="userSpaceOnUse" patternTransform="translate(6 2)">
+          <path d="M14 33 0 25V8L14 0l14 8v17L14 33v17M14 0v-17" fill="none" stroke="currentColor" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect width="280" height="280" fill="url(#comb)"/>
+    </svg>
+    <div class="seal-row">
+      <div class="seal" aria-hidden="true">
+        <svg viewBox="0 0 64 64">
+          <rect x="12" y="12" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1"/>
+          <rect x="12" y="12" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1" transform="rotate(45 32 32)"/>
+        </svg>
+        <span>AK</span>
+      </div>
+      <span class="tag">Байланыс</span>
     </div>
     <h1 id="name">Aksultan<br>Kaliyev</h1>
     <p class="lead">Приложите телефон к метке или наведите камеру на QR-код, чтобы сохранить контакт.</p>
@@ -140,6 +174,14 @@
       <p class="status" id="status" role="status"></p>
     </div>
   </section>
+
+  <svg class="horn" viewBox="0 0 240 24" aria-hidden="true" focusable="false">
+    <g fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
+      <path id="curl" d="M128 12H168C180 12 186 4 195 4C204 4 207 12 201 16C196 19 190 15 193 10C195 7 199 8 199 11"/>
+      <use href="#curl" transform="matrix(-1 0 0 1 240 0)"/>
+      <path d="M120 6 126 12 120 18 114 12Z"/>
+    </g>
+  </svg>
 
   <ul class="contacts">
     <li>
