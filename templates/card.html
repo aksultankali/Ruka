@@ -3,34 +3,39 @@
 <meta name="description" content="Цифровая визитка {{FULL_NAME}}: контакты, QR-код и сохранение в телефонную книгу.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600&family=Manrope:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600&family=Manrope:wght@400;600;700&display=swap">
 <style>
-  /* Layout: one narrow phone column — ink card, contact list, white QR tile. Same as the Figma frame. */
+  /* Hallmark · checked: 2026-10-24 · genre: editorial (inferred: a personal card)
+   * floor: 0 FAIL · fixed: 13 (7b, 24b, 25, 26a, 26b, 34, 39b, 48, 49, 63, 64, 67, 75) · structural: 3 printed (44c, 77, 79)
+   * built: the project · redesign: polish · v2.0.0 */
+  /* Layout: one narrow phone column — ink card, contact list, QR tile. Same as the Figma frame. */
   :root {
     --paper: #EEF0EC;
     --ink: #17213A;
     --amber: #D9A441;
     --muted: #5B6478;
     --line: #D5D9D2;
-    --tile: #FFFFFF;
+    --ghost-line: #3A4766;
+    --tile: #FBFCF9;
     --card-fg: #EEF0EC;
     --card-sub: #B9C0D0;
     --qr: #17213A;
     --fg: #17213A;
+    --focus: #17213A;
     --font-display: "Unbounded", "Arial Black", system-ui, sans-serif;
     --font-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
-    --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --paper: #0F1526; --ink: #1C2744; --muted: #8E97AD; --line: #27314D;
-      --tile: #FFFFFF; --card-fg: #EEF0EC; --card-sub: #B9C0D0; --qr: #17213A; --fg: #EEF0EC; color-scheme: dark;
+      --paper: #0F1526; --ink: #1C2744; --muted: #8E97AD; --line: #27314D; --ghost-line: #3A4766;
+      --tile: #F4F5F1; --card-fg: #EEF0EC; --card-sub: #B9C0D0; --qr: #17213A; --fg: #EEF0EC; --focus: #D9A441; color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
-    --paper: #0F1526; --ink: #1C2744; --muted: #8E97AD; --line: #27314D;
-    --tile: #FFFFFF; --card-fg: #EEF0EC; --card-sub: #B9C0D0; --qr: #17213A; --fg: #EEF0EC; color-scheme: dark;
+    --paper: #0F1526; --ink: #1C2744; --muted: #8E97AD; --line: #27314D; --ghost-line: #3A4766;
+    --tile: #F4F5F1; --card-fg: #EEF0EC; --card-sub: #B9C0D0; --qr: #17213A; --fg: #EEF0EC; --focus: #D9A441; color-scheme: dark;
   }
+  html, body { overflow-x: clip; }
   body {
     background: var(--paper);
     color: var(--fg);
@@ -55,7 +60,7 @@
     border-radius: 28px;
     padding: 28px;
     display: grid;
-    gap: 22px;
+    gap: 24px;
   }
   .card__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .monogram {
@@ -64,41 +69,48 @@
     background: var(--amber); color: var(--ink);
     font: 600 18px/1 var(--font-display);
   }
-  .tag { font: 500 11px/1 var(--font-mono); letter-spacing: 0.1em; color: var(--amber); }
+  .tag { font: 600 14px/1 var(--font-body); color: var(--amber); }
   h1 {
     margin: 0;
     font: 600 clamp(30px, 9vw, 36px)/1.05 var(--font-display);
     text-wrap: balance;
+    overflow-wrap: break-word;
+    min-width: 0;
   }
-  .lead { margin: 0; color: var(--card-sub); font-size: 15px; line-height: 1.4; }
+  .lead { margin: 0; color: var(--card-sub); font-size: 16px; line-height: 1.4; }
 
   .btn {
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    min-height: 56px; border-radius: 16px; border: 0;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    min-height: 52px; border-radius: 16px; border: 0;
     background: var(--amber); color: var(--ink);
     font: 700 17px/1 var(--font-body);
-    text-decoration: none; cursor: pointer;
+    text-decoration: none; cursor: pointer; white-space: nowrap;
     transition: transform .15s ease, filter .15s ease;
   }
   .btn:hover { filter: brightness(1.05); }
   .btn:active { transform: scale(.98); }
-  .btn:focus-visible, .copy:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
-  .btn--ghost { background: transparent; color: var(--card-fg); border: 1px solid #3A4766; min-height: 48px; font-size: 15px; }
-  .actions { display: grid; gap: 10px; }
+  .btn:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+  .btn:disabled, .copy:disabled { opacity: .5; cursor: not-allowed; transform: none; filter: none; }
+  .btn--ghost { background: transparent; color: var(--card-fg); border: 1px solid var(--ghost-line); min-height: 48px; font-size: 16px; }
+  .actions { display: grid; gap: 12px; }
 
   .contacts { list-style: none; margin: 0; padding: 0 8px; }
   .contacts li {
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    padding-block: 14px; border-bottom: 1px solid var(--line);
+    padding-block: 16px; border-bottom: 1px solid var(--line);
   }
   .contacts .text { min-width: 0; display: grid; gap: 4px; }
-  .label { font: 500 11px/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-  .value { font-weight: 600; font-size: 17px; overflow-wrap: anywhere; color: inherit; text-decoration: none; user-select: all; }
+  .label { font: 500 14px/1.2 var(--font-body); color: var(--muted); }
+  .value { font-weight: 600; font-size: 16px; overflow-wrap: break-word; color: inherit; text-decoration: none; user-select: all; }
+  .value:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: 4px; }
   .copy {
     flex: none; border: 1px solid var(--line); background: transparent; color: var(--muted);
-    border-radius: 999px; padding: 6px 12px; font: 500 12px/1 var(--font-mono); cursor: pointer;
+    border-radius: 999px; min-height: 44px; padding: 0 12px; font: 600 13px/1 var(--font-body); cursor: pointer;
+    transition: color .15s ease, border-color .15s ease;
   }
-  .copy[data-done] { color: var(--amber); border-color: var(--amber); }
+  .copy:hover { color: var(--fg); border-color: var(--muted); }
+  .copy:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .copy[data-done] { color: var(--fg); border-color: var(--amber); }
 
   .qr {
     background: var(--tile); color: var(--qr);
@@ -106,25 +118,25 @@
     display: grid; justify-items: center; gap: 16px; text-align: center;
   }
   .qr svg { width: min(240px, 100%); height: auto; display: block; }
-  .qr p { margin: 0; font-weight: 600; font-size: 15px; line-height: 1.4; max-width: 26ch; }
+  .qr p { margin: 0; font-weight: 600; font-size: 16px; line-height: 1.4; max-width: 30ch; }
 
-  .foot { margin: 0; text-align: center; font: 500 10px/1.6 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .foot { margin: 0; text-align: center; font: 500 13px/1.5 var(--font-body); color: var(--muted); }
   .status { min-height: 1.4em; margin: 0; font-size: 14px; color: var(--card-sub); }
 
-  @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .btn, .copy { transition: none; } }
 </style>
 
 <main class="page">
   <section class="card" aria-labelledby="name">
     <div class="card__top">
       <div class="monogram" aria-hidden="true">{{INITIALS}}</div>
-      <span class="tag">NFC · QR · VCF</span>
+      <span class="tag">Визитка</span>
     </div>
     <h1 id="name">{{NAME_LINES}}</h1>
     <p class="lead">Приложите телефон к метке или наведите камеру на QR-код, чтобы сохранить контакт.</p>
     <div class="actions">
       <a class="btn" id="save" href="contact.vcf">Сохранить контакт</a>
-      <button class="btn btn--ghost" id="nfc" type="button" hidden>Записать ссылку на NFC-метку</button>
+      <button class="btn btn--ghost" id="nfc" type="button" hidden>Записать NFC-метку</button>
       <p class="status" id="status" role="status"></p>
     </div>
   </section>
@@ -138,7 +150,7 @@
     <p>Наведите камеру телефона на код, и контакт сохранится</p>
   </section>
 
-  <p class="foot">{{FULL_NAME}} · визитка</p>
+  <p class="foot">Приложите телефон к NFC-метке, и визитка откроется сама</p>
 </main>
 
 <script>

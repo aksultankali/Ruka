@@ -91,10 +91,12 @@ def contact_rows(c):
     out = []
     for label, value, href in rows:
         v, h = html.escape(value), html.escape(href)
+        # On narrow phones a long address breaks after the @, never mid-word.
+        shown = v.replace("@", "@<wbr>", 1) if "@" in v[1:] else v
         out.append(
             "    <li>\n"
             f'      <div class="text"><span class="label">{html.escape(label)}</span>'
-            f'<a class="value" href="{h}" target="_blank" rel="noopener">{v}</a></div>\n'
+            f'<a class="value" href="{h}" target="_blank" rel="noopener">{shown}</a></div>\n'
             f'      <button class="copy" type="button" data-copy="{v}">Копировать</button>\n'
             "    </li>"
         )
